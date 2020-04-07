@@ -1,9 +1,9 @@
 package user
 
 import (
+	"bookstore/datasources/mysql/users_db"
+	"bookstore/utils/error"
 	"fmt"
-	"tripplanner/datasources/mysql/users_db"
-	"tripplanner/utils/error"
 
 	"github.com/go-sql-driver/mysql"
 )

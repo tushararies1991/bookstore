@@ -1,7 +1,7 @@
 package main
 
 import (
-	"tripplanner/app"
+	"bookstore/app"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module tripplanner
+module bookstore
 
 go 1.13
 

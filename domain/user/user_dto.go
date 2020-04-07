@@ -1,8 +1,8 @@
 package user
 
 import (
+	"bookstore/utils/error"
 	"strings"
-	"tripplanner/utils/error"
 )
 
 const (

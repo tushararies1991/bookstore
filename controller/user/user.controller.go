@@ -1,14 +1,14 @@
 package user
 
 import (
+	"bookstore/domain/user"
+	usrSrvc "bookstore/services"
+	appErr "bookstore/utils/error"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
-	"tripplanner/domain/user"
-	usrSrvc "tripplanner/services"
-	appErr "tripplanner/utils/error"
 
 	"github.com/gin-gonic/gin"
 )

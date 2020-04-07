@@ -1,9 +1,9 @@
 package service
 
 import (
-	"tripplanner/domain/user"
-	"tripplanner/utils/appUtils"
-	"tripplanner/utils/error"
+	"bookstore/domain/user"
+	"bookstore/utils/appUtils"
+	"bookstore/utils/error"
 )
 
 // "UserService is"

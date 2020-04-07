@@ -1,9 +1,9 @@
 package app
 
 import (
-	"tripplanner/controller/ping"
-	"tripplanner/controller/route"
-	"tripplanner/controller/user"
+	"bookstore/controller/ping"
+	"bookstore/controller/route"
+	"bookstore/controller/user"
 
 	"github.com/gin-gonic/gin"
 )
