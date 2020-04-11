@@ -1,9 +1,10 @@
 package user
 
 import (
-	"bookstore/datasources/mysql/users_db"
-	"bookstore/utils/error"
+	"bookstore_users/datasources/mysql/users_db"
+	"bookstore_users/utils/error"
 	"fmt"
+	"log"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -13,12 +14,13 @@ var (
 )
 
 const (
-	indexUniqueEmail = "email_UNIQUE"
-	queryInsertUser  = "INSERT INTO users(first_name, last_name, email, phone, created_at, password, status) VALUES(?,?,?,?,?,?,?)"
-	querySelectUser  = "SELECT id, first_name, last_name, email, phone, created_at, status FROM users_db.users WHERE id=?"
-	queryUpdateUser  = "UPDATE users SET first_name=?, last_name=?, email=?, phone=? WHERE id=?"
-	queryDeleteUser  = "DELETE FROM users WHERE id=?"
-	queryFindUser    = "Select id, first_name, last_name, email, created_at, phone, status FROM users_db.users WHERE status=?"
+	indexUniqueEmail         = "email_UNIQUE"
+	queryInsertUser          = "INSERT INTO users(first_name, last_name, email, phone, created_at, password, status) VALUES(?,?,?,?,?,?,?)"
+	querySelectUser          = "SELECT id, first_name, last_name, email, phone, created_at, status FROM users_db.users WHERE id=?"
+	queryUpdateUser          = "UPDATE users SET first_name=?, last_name=?, email=?, phone=? WHERE id=?"
+	queryDeleteUser          = "DELETE FROM users WHERE id=?"
+	queryFindUser            = "SELECT id, first_name, last_name, email, created_at, phone, status FROM users_db.users WHERE status=?"
+	queryFindUserByEmlAndPwd = "SELECT id, first_name, last_name, email, created_at, phone, status FROM users_db.users WHERE email=? AND password=? AND status=?"
 )
 
 func (user *User) Save() *error.AppErr {
@@ -171,4 +173,32 @@ func (user *User) FindByStatus() (Users, *error.AppErr) {
 		return nil, error.NewNotFoundError(fmt.Sprintf("No user matchin status %s", user.Status))
 	}
 	return users, nil
+}
+
+func (user *User) FindByEmlAndPwd() *error.AppErr {
+	findUsrStmnt, err := users_db.Client.Prepare(queryFindUserByEmlAndPwd)
+
+	if err != nil {
+		return error.NewInternalServerError(err.Error())
+	}
+
+	rslt := findUsrStmnt.QueryRow(user.Email, user.Password, StatusActive)
+	if err := rslt.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email, &user.CreatedAt, &user.Phone, &user.Status); err != nil {
+		log.Printf(err.Error())
+		sqlErr, isSQLErr := err.(*mysql.MySQLError)
+
+		if !isSQLErr {
+			return error.NewNotFoundError("Invalid user credential.")
+		}
+
+		if sqlErr != nil {
+			switch sqlErr.Number {
+			case 1062:
+				return error.NewInternalServerError(sqlErr.Message)
+			default:
+				return error.NewInternalServerError(sqlErr.Message)
+			}
+		}
+	}
+	return nil
 }

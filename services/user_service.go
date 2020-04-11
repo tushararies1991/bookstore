@@ -1,9 +1,9 @@
 package service
 
 import (
-	"bookstore/domain/user"
-	"bookstore/utils/appUtils"
-	"bookstore/utils/error"
+	"bookstore_users/domain/user"
+	"bookstore_users/utils/appUtils"
+	"bookstore_users/utils/error"
 )
 
 // "UserService is"
@@ -18,6 +18,7 @@ type iUserService interface {
 	UpdateUser(bool, user.User) (*user.User, *error.AppErr)
 	DeleteUser(int64) *error.AppErr
 	FindByStatus(string) (user.Users, *error.AppErr)
+	LoginUser(user.LoginRequest) (*user.User, *error.AppErr)
 }
 
 func (us *userService) CreateUser(user user.User) (*user.User, *error.AppErr) {
@@ -83,4 +84,12 @@ func (us *userService) DeleteUser(userID int64) *error.AppErr {
 func (us *userService) FindByStatus(status string) (user.Users, *error.AppErr) {
 	user := &user.User{Status: status}
 	return user.FindByStatus()
+}
+
+func (us *userService) LoginUser(lr user.LoginRequest) (*user.User, *error.AppErr) {
+	user := &user.User{Email: lr.Email, Password: lr.Password}
+	if err := user.FindByEmlAndPwd(); err != nil {
+		return nil, err
+	}
+	return user, nil
 }

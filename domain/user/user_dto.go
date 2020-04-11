@@ -1,7 +1,7 @@
 package user
 
 import (
-	"bookstore/utils/error"
+	"bookstore_users/utils/error"
 	"strings"
 )
 

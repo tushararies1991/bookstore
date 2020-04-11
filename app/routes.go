@@ -1,15 +1,17 @@
 package app
 
 import (
-	"bookstore/controller/ping"
-	"bookstore/controller/route"
-	"bookstore/controller/user"
+	"bookstore_users/controller/ping"
+	"bookstore_users/controller/route"
+	"bookstore_users/controller/user"
 
 	"github.com/gin-gonic/gin"
 )
 
 func registerRoutes(r *gin.Engine) {
 	r.GET("/ping", ping.Ping)
+
+	r.POST("/user/login", user.Login)
 
 	r.POST("/user/create", user.CreateUser)
 	r.GET("/user/:user_id", user.GetUser)

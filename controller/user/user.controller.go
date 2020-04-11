@@ -1,9 +1,9 @@
 package user
 
 import (
-	"bookstore/domain/user"
-	usrSrvc "bookstore/services"
-	appErr "bookstore/utils/error"
+	"bookstore_users/domain/user"
+	usrSrvc "bookstore_users/services"
+	appErr "bookstore_users/utils/error"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -107,4 +107,21 @@ func FindByStatus(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, users.Marshall(c.GetHeader("X-Public") == "true"))
+}
+
+func Login(c *gin.Context) {
+	var lr user.LoginRequest
+	if err := c.ShouldBindJSON(&lr); err != nil {
+		err := appErr.NewBadRequestError("JSON not valid")
+		c.JSON(err.Status, err)
+		return
+	}
+
+	user, err := usrSrvc.UserService.LoginUser(lr)
+	if err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, user.Marshall(c.GetHeader("X-Public") == "true"))
 }

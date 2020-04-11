@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bookstore/app"
+	"bookstore_users/app"
 )
 
 func main() {
