@@ -7,5 +7,5 @@ import (
 func StartApplication() {
 	r := gin.Default()
 	registerRoutes(r)
-	r.Run()
+	r.Run(":8081")
 }

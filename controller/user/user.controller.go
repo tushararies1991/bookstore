@@ -38,6 +38,7 @@ func CreateUser(c *gin.Context) {
 }
 
 func GetUser(c *gin.Context) {
+	// if oauth.
 	userId, usrErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if usrErr != nil {
 		err := appErr.NewBadRequestError("invalid user id")
